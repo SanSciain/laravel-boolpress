@@ -87,7 +87,7 @@ class PostController extends Controller
         $post_to_update->slug = $this->createSlug($post_to_update->title);
         $post_to_update->save();
 
-        return redirect(route('admin.posts.show', ['post' => $post_to_update->id]));
+        return redirect()->route('admin.posts.show', ['post' => $post_to_update->id]);
     }
 
     /**
@@ -100,7 +100,7 @@ class PostController extends Controller
     {
         $post_to_delete = Post::findOrFail($id);
         $post_to_delete->delete();
-        return redirect(route('admin.posts.index'));
+        return redirect()->route('admin.posts.index');
     }
 
     //Function to validate input from forms
