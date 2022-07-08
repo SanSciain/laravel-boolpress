@@ -19,6 +19,16 @@
             <label for="title" class="form-label">Title</label>
             <input type="text" class="form-control" name="title" id="title" value="{{ old('title') }}">
         </div>
+        <div class="from-group mb-3">
+            <label for="category_id" class="form-label">Category</label>
+            <select name="category_id" id="category_id">
+                <option value="">None</option>
+                @foreach ($categories as $item)
+                    <option value="{{ $item->id }}" {{ $item->id == old('category_id') ? 'selected' : '' }}>
+                        {{ $item->name }}</option>
+                @endforeach
+            </select>
+        </div>
         <div class="form-group">
             <label for="content">Content</label>
             <textarea type="text" class="form-control" name="content" id="content"> {{ old('content') }} </textarea>

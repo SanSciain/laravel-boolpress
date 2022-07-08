@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <div class="row justify-content-center">
+    <div class="row">
         @foreach ($posts as $item)
             <div class="card m-3" style="width: 18rem;">
                 <div class="card-body">
