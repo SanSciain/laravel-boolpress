@@ -84,10 +84,15 @@ class PostController extends Controller
         $request->validate($this->thingsToValidate());
         $data = $request->all();
         $post_to_update = Post::findOrFail($id);
-        $post_to_update->fill($data);
-        // $post_to_update->slug = $this->createSlug($post_to_update->title);
-        $post_to_update->slug = Post::createSlug($post_to_update->title);
-        $post_to_update->save();
+        // Metodo con fill + save
+        // $post_to_update->fill($data);
+        // // $post_to_update->slug = $this->createSlug($post_to_update->title);
+        // $post_to_update->slug = Post::createSlug($post_to_update->title);
+        // $post_to_update->save();
+
+        // Metodo con update
+        $data['slug'] = Post::createSlug($data['title']);
+        $post_to_update->update($data);
 
         return redirect()->route('admin.posts.show', ['post' => $post_to_update->id]);
     }
