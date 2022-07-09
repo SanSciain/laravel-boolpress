@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Category;
 use App\Http\Controllers\Controller;
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 // use Illuminate\Support\Str;
 
@@ -28,8 +29,9 @@ class PostController extends Controller
      */
     public function create()
     {
+        $tags = Tag::all();
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -47,6 +49,11 @@ class PostController extends Controller
         // $new_post->slug = $this->createSlug($new_post->title);
         $new_post->slug = Post::createSlug($new_post->title);
         $new_post->save();
+
+        if (isset($data['tags'])) {
+            $new_post->tags()->sync($data['tags']);
+        }
+
         return redirect()->route('admin.posts.show', ['post' => $new_post->id]);
     }
 
@@ -70,9 +77,10 @@ class PostController extends Controller
      */
     public function edit($id)
     {
+        $tags = Tag::all();
         $categories = Category::all();
         $post = Post::findOrFail($id);
-        return view('admin.posts.edit', compact('post', 'categories'));
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -97,6 +105,12 @@ class PostController extends Controller
         $data['slug'] = Post::createSlug($data['title']);
         $post_to_update->update($data);
 
+        if (isset($data['tags'])) {
+            $post_to_update->tags()->sync($data['tags']);
+        } else {
+            $post_to_update->tags()->sync([]);
+        }
+
         return redirect()->route('admin.posts.show', ['post' => $post_to_update->id]);
     }
 
@@ -109,6 +123,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post_to_delete = Post::findOrFail($id);
+        $post_to_delete->tags()->sync([]);
         $post_to_delete->delete();
         return redirect()->route('admin.posts.index');
     }
@@ -118,7 +133,8 @@ class PostController extends Controller
     {
         return [
             'title' => 'required|max:255',
-            'content' => 'required|max:40000'
+            'content' => 'required|max:40000',
+            'category_id' => 'nullable|exists:categories,id'
         ];
     }
 
