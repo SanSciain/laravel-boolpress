@@ -1,16 +1,17 @@
 <template>
     <div>
         <h1>FrontOffice</h1>
-        <FirstComponent />
+        <Posts />
     </div>
 </template>
 
 <script>
-import FirstComponent from "../components/FirstComponent.vue";
+import Posts from "../components/Posts.vue";
+
 export default {
     name: "App",
     components: {
-        FirstComponent,
+        Posts,
     },
 };
 </script>
