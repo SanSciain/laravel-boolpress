@@ -1,5 +1,16 @@
 <template>
     <div class="container">
+        <select
+            class="form-select"
+            aria-label="Default select example"
+            v-model="itemsPerPage"
+            @change="getPosts(1)"
+        >
+            <option selected>Open this select menu</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+        </select>
+
         <div class="row flex-column">
             <div class="card my-3" v-for="item in posts" :key="item.id">
                 <div class="card-body">
@@ -57,6 +68,7 @@ export default {
             currentPage: 1,
             lastPage: 0,
             totalPosts: 0,
+            itemsPerPage: 4,
         };
     },
     created() {
@@ -68,6 +80,7 @@ export default {
                 .get("/api/posts", {
                     params: {
                         page: nPage,
+                        items_per_page: this.itemsPerPage,
                     },
                 })
                 .then((resp) => {

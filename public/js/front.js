@@ -1915,7 +1915,8 @@ __webpack_require__.r(__webpack_exports__);
       posts: [],
       currentPage: 1,
       lastPage: 0,
-      totalPosts: 0
+      totalPosts: 0,
+      itemsPerPage: 4
     };
   },
   created: function created() {
@@ -1927,7 +1928,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get("/api/posts", {
         params: {
-          page: nPage
+          page: nPage,
+          items_per_page: this.itemsPerPage
         }
       }).then(function (resp) {
         _this.posts = resp.data.results.data;
@@ -1978,7 +1980,43 @@ var render = function render() {
 
   return _c("div", {
     staticClass: "container"
-  }, [_c("div", {
+  }, [_c("select", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.itemsPerPage,
+      expression: "itemsPerPage"
+    }],
+    staticClass: "form-select",
+    attrs: {
+      "aria-label": "Default select example"
+    },
+    on: {
+      change: [function ($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+          return o.selected;
+        }).map(function (o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val;
+        });
+        _vm.itemsPerPage = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
+      }, function ($event) {
+        return _vm.getPosts(1);
+      }]
+    }
+  }, [_c("option", {
+    attrs: {
+      selected: ""
+    }
+  }, [_vm._v("Open this select menu")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "4"
+    }
+  }, [_vm._v("4")]), _vm._v(" "), _c("option", {
+    attrs: {
+      value: "6"
+    }
+  }, [_vm._v("6")])]), _vm._v(" "), _c("div", {
     staticClass: "row flex-column"
   }, _vm._l(_vm.posts, function (item) {
     return _c("div", {
