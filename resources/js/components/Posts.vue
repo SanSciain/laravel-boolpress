@@ -1,5 +1,7 @@
 <template>
     <div class="container">
+        <p>Posts Found: {{ totalPosts }}</p>
+
         <select
             class="form-select"
             aria-label="Default select example"
@@ -18,6 +20,13 @@
                     <p class="card-text">
                         {{ item.content }}
                     </p>
+                    <router-link
+                        :to="{
+                            name: 'single-post',
+                            params: { slug: item.slug },
+                        }"
+                        >Show More</router-link
+                    >
                 </div>
             </div>
         </div>
