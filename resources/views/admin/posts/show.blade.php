@@ -3,6 +3,9 @@
 @section('content')
     <div class="row">
         <div class="card">
+            @if ($post->thumb)
+                <img src="{{ asset('storage/' . $post->thumb) }}" class="card-img-top" alt="">
+            @endif
             <div class="card-body">
                 <h4 class="card-title">Title: {{ $post->title }}</h4>
                 <h5>Slug: {{ $post->slug }}</h5>

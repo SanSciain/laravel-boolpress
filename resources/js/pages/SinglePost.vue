@@ -7,9 +7,9 @@
                     Category: {{ post.category ? post.category.name : "none" }}
                 </h6>
                 <div class="tags">
-                    <span v-for="tag in post.tags" :key="tag.id">{{
-                        tag.name
-                    }}</span>
+                    <span v-for="tag in post.tags" :key="tag.id"
+                        >{{ tag.name }},
+                    </span>
                 </div>
                 <p class="card-text">
                     {{ post.content }}

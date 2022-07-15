@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 // use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -44,6 +46,13 @@ class PostController extends Controller
     {
         $request->validate($this->thingsToValidate());
         $data = $request->all();
+
+
+        if (isset($data['image'])) {
+            $image_path = Storage::put('post_thumb', $data['image']);
+            $data['thumb'] = $image_path;
+        }
+
         $new_post = new Post();
         $new_post->fill($data);
         // $new_post->slug = $this->createSlug($new_post->title);
@@ -94,12 +103,22 @@ class PostController extends Controller
     {
         $request->validate($this->thingsToValidate());
         $data = $request->all();
+
+
         $post_to_update = Post::findOrFail($id);
         // Metodo con fill + save
         // $post_to_update->fill($data);
         // // $post_to_update->slug = $this->createSlug($post_to_update->title);
         // $post_to_update->slug = Post::createSlug($post_to_update->title);
         // $post_to_update->save();
+
+        if (isset($data['image'])) {
+            if ($post_to_update->thumb) {
+                Storage::delete($post_to_update->thumb);
+            }
+            $image_path = Storage::put('post_thumb', $data['image']);
+            $data['thumb'] = $image_path;
+        }
 
         // Metodo con update
         $data['slug'] = Post::createSlug($data['title']);
@@ -124,6 +143,9 @@ class PostController extends Controller
     {
         $post_to_delete = Post::findOrFail($id);
         $post_to_delete->tags()->sync([]);
+        if ($post_to_delete->thumb) {
+            Storage::delete($post_to_delete->thumb);
+        }
         $post_to_delete->delete();
         return redirect()->route('admin.posts.index');
     }
@@ -134,7 +156,8 @@ class PostController extends Controller
         return [
             'title' => 'required|max:255',
             'content' => 'required|max:40000',
-            'category_id' => 'nullable|exists:categories,id'
+            'category_id' => 'nullable|exists:categories,id',
+            'image' => 'nullable|image|max:512',
         ];
     }
 

@@ -2343,7 +2343,7 @@ var render = function render() {
   }, _vm._l(_vm.post.tags, function (tag) {
     return _c("span", {
       key: tag.id
-    }, [_vm._v(_vm._s(tag.name))]);
+    }, [_vm._v(_vm._s(tag.name) + ",\r\n                    ")]);
   }), 0), _vm._v(" "), _c("p", {
     staticClass: "card-text"
   }, [_vm._v("\r\n                    " + _vm._s(_vm.post.content) + "\r\n                ")])])]) : _c("section", [_vm._v("Loading...")])]);
